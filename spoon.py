@@ -6,7 +6,7 @@ from math import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-class Circles():
+class Circles:
     def __init__(self, posx, posy, number):
         self.posx = posx
         self.posy = posy
@@ -26,6 +26,48 @@ class Circles():
         glEnd()
         glPopMatrix()
 
+class Die:
+    def __init__(self,  number):
+        self.number = number
+        self.vertices = get_vertices(self.number)
+
+    def draw(self):
+        glBegin(GL_QUADS)
+        for surface in surfaces:
+            x = 0
+            for vertex in surface:
+                x += 1
+                glColor3fv(colors[x])
+                glVertex3fv(self.vertices[vertex])
+        glEnd()
+        glBegin(GL_LINES)
+        for edge in edges:
+            x = 0
+            for vertex in edge:
+                x += 1
+                glColor3fv(colors_black[x])
+                glVertex3fv(self.vertices[vertex])
+        glEnd()
+        sides = (
+            [Circles(0, 0, 1)],
+            [Circles(-0.5, 0.5, 2), Circles(0.5, -0.5, 2)],
+            [Circles(-0.5, 0.5, 3), Circles(0.5, -0.5, 3), 
+            Circles(0, 0, 3)],
+            [Circles(-0.5, -0.5, 4), Circles(0.5, 0.5, 4),
+            Circles(-0.5, 0.5, 4), Circles(0.5, -0.5, 4)],
+            [Circles(-0.5, -0.5, 5), Circles(0.5, 0.5, 5),
+            Circles(-0.5, 0.5, 5), Circles(0.5, -0.5, 5),
+            Circles(0, 0, 5)],
+            [Circles(-0.5, -0.5, 6), Circles(0.5, 0.5, 6),
+            Circles(-0.5, 0.5, 6), Circles(0.5, -0.5, 6),
+            Circles(-0.5, 0, 6), Circles(0.5, 0, 6)],
+        )
+        for side in sides:
+            k = 0
+            for die in side:
+                side[k].draw()
+                k += 1
+
 def rotate(number):
     if number == 1:
         pass
@@ -40,16 +82,30 @@ def rotate(number):
     elif number == 6:
         glRotate(180, 1, 0, 0)
 
-vertices = (
-    (1, -1, -1),
-    (1, 1, -1),
-    (-1, 1, -1),
-    (-1, -1, -1),
-    (1, -1, 1),
-    (1, 1, 1),
-    (-1, -1, 1),
-    (-1, 1, 1),
-    )
+def get_vertices(number):
+    if number == 1:
+        vertices = (
+            (-1, -1, -1),
+            (-1, 1, -1),
+            (-3, 1, -1),
+            (-3, -1, -1),
+            (-1, -1, 1),
+            (-1, 1, 1),
+            (-3, -1, 1),
+            (-3, 1, 1),
+            )
+    elif number == 2:
+        vertices = (
+            (3, -1, -1),
+            (3, 1, -1),
+            (1, 1, -1),
+            (1, -1, -1),
+            (3, -1, 1),
+            (3, 1, 1),
+            (1, -1, 1),
+            (1, 1, 1),
+            )
+    return vertices
 
 edges = (
     (0, 1),
@@ -78,18 +134,6 @@ colors_black = (
     (0, 0, 0),
     (0, 0, 0),
     (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
     )
 
 surfaces = (
@@ -101,52 +145,31 @@ surfaces = (
     (4, 0, 3, 6),
     )
 
-def Cube():
-    glBegin(GL_QUADS)
-    for surface in surfaces:
-        x = 0
-        for vertex in surface:
-            x += 1
-            glColor3fv(colors[x])
-            glVertex3fv(vertices[vertex])
-    glEnd()
-    glBegin(GL_LINES)
-    for edge in edges:
-        x = 0
-        for vertex in edge:
-            x += 1
-            glColor3fv(colors_black[x])
-            glVertex3fv(vertices[vertex])
-    glEnd()
-    sides = (
-        [Circles(0, 0, 1)],
-        [Circles(-0.5, 0.5, 2), Circles(0.5, -0.5, 2)],
-        [Circles(-0.5, 0.5, 3), Circles(0.5, -0.5, 3), 
-        Circles(0, 0, 3)],
-        [Circles(-0.5, -0.5, 4), Circles(0.5, 0.5, 4),
-        Circles(-0.5, 0.5, 4), Circles(0.5, -0.5, 4)],
-        [Circles(-0.5, -0.5, 5), Circles(0.5, 0.5, 5),
-        Circles(-0.5, 0.5, 5), Circles(0.5, -0.5, 5),
-        Circles(0, 0, 5)],
-        [Circles(-0.5, -0.5, 6), Circles(0.5, 0.5, 6),
-        Circles(-0.5, 0.5, 6), Circles(0.5, -0.5, 6),
-        Circles(-0.5, 0, 6), Circles(0.5, 0, 6)],
-    )
-    for side in sides:
-        k = 0
-        for die in side:
-            side[k].draw()
-            k += 1
+def Dice():
+    glPushMatrix()
+    glRotate(4, -1, -1, -1)
+    die_one = Die(1)
+    die_one.draw()
+    glPopMatrix()
+    glPushMatrix()
+    glRotate(4, 1, 1, 1)
+    die_two = Die(2)
+    die_two.draw()
+    glPopMatrix()
 
 def main():
     pygame.init()
     display = (800, 600)
     
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity
     gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
-    glTranslatef(0.0, 0.0, -5)
+    glTranslatef(0.0, 0.0, -10)
     glEnable(GL_DEPTH_TEST)
     glDepthFunc(GL_LESS)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
 
     while True:
         for event in pygame.event.get():
@@ -154,8 +177,7 @@ def main():
                 pygame.quit()
                 quit()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glRotatef(5, 2, 1, 1)
-        Cube()
+        Dice()
         pygame.display.flip()
         pygame.time.wait(1)
 
