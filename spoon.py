@@ -66,7 +66,17 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            if event.type == pygame.KEYDOWN:
+            if event.type == KEYDOWN:
+                while angle != 90:
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        quit()
+                    angle+=plus
+                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+                    rotate_die(die_one, 1, angle, rand_one)
+                    rotate_die(die_two, 2, angle, rand_two)
+                    pygame.display.flip()
+                    pygame.time.wait(1)
                 wait()
             '''
             if event.key == K_w:
