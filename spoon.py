@@ -1,166 +1,51 @@
 import pygame
-from pygame.locals import *
+import random
 
+from pygame.locals import *
 from math import *
+
+from die import *
+from circles import *
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-class Circles:
-    def __init__(self, posx, posy, number):
-        self.posx = posx
-        self.posy = posy
-        self.number = number
-
-    def draw(self):
-        sides = 100
-        radius = 0.20
-        glPushMatrix()
-        rotate(self.number)
-        glBegin(GL_TRIANGLE_FAN)
-        for i in range(sides):
-            cosine = radius * cos(i*2*pi/sides)
-            sine = radius * sin(i*2*pi/sides)
-            glVertex3f(cosine + self.posx, sine + self.posy, 1.01)
-            glColor3fv(colors_black[0])
-        glEnd()
-        glPopMatrix()
-
-class Die:
-    def __init__(self,  number):
-        self.number = number
-        self.vertices = get_vertices(self.number)
-
-    def draw(self):
-        glBegin(GL_QUADS)
-        for surface in surfaces:
-            x = 0
-            for vertex in surface:
-                x += 1
-                glColor3fv(colors[x])
-                glVertex3fv(self.vertices[vertex])
-        glEnd()
-        glBegin(GL_LINES)
-        for edge in edges:
-            x = 0
-            for vertex in edge:
-                x += 1
-                glColor3fv(colors_black[x])
-                glVertex3fv(self.vertices[vertex])
-        glEnd()
-        sides = (
-            [Circles(0, 0, 1)],
-            [Circles(-0.5, 0.5, 2), Circles(0.5, -0.5, 2)],
-            [Circles(-0.5, 0.5, 3), Circles(0.5, -0.5, 3), 
-            Circles(0, 0, 3)],
-            [Circles(-0.5, -0.5, 4), Circles(0.5, 0.5, 4),
-            Circles(-0.5, 0.5, 4), Circles(0.5, -0.5, 4)],
-            [Circles(-0.5, -0.5, 5), Circles(0.5, 0.5, 5),
-            Circles(-0.5, 0.5, 5), Circles(0.5, -0.5, 5),
-            Circles(0, 0, 5)],
-            [Circles(-0.5, -0.5, 6), Circles(0.5, 0.5, 6),
-            Circles(-0.5, 0.5, 6), Circles(0.5, -0.5, 6),
-            Circles(-0.5, 0, 6), Circles(0.5, 0, 6)],
-        )
-        for side in sides:
-            k = 0
-            for die in side:
-                side[k].draw()
-                k += 1
-
-def rotate(number):
+def which_to_rotate(die, number, angle, d_coord):
+    x = d_coord[0]
+    y = d_coord[1]
+    z = d_coord[2]
     if number == 1:
-        pass
+        glTranslatef(-2, 0, 0)
+        glRotatef(angle, x, y, z)
+        glTranslatef(2, 0, 0)
+        die.draw(number)
     elif number == 2:
-        glRotate(90, 1, 0, 0)
-    elif number == 3:
-        glRotate(90, 0, 1, 0)
-    elif number == 4:
-        glRotate(270, 0, 1, 0)
-    elif number == 5:
-        glRotate(270, 1, 0, 0)
-    elif number == 6:
-        glRotate(180, 1, 0, 0)
+        glTranslatef(2, 0, 0)
+        glRotatef(angle, -x, y, z)
+        glTranslatef(-2, 0, 0)
+        die.draw(number)
 
-def get_vertices(number):
-    if number == 1:
-        vertices = (
-            (-1, -1, -1),
-            (-1, 1, -1),
-            (-3, 1, -1),
-            (-3, -1, -1),
-            (-1, -1, 1),
-            (-1, 1, 1),
-            (-3, -1, 1),
-            (-3, 1, 1),
-            )
-    elif number == 2:
-        vertices = (
-            (3, -1, -1),
-            (3, 1, -1),
-            (1, 1, -1),
-            (1, -1, -1),
-            (3, -1, 1),
-            (3, 1, 1),
-            (1, -1, 1),
-            (1, 1, 1),
-            )
-    return vertices
-
-edges = (
-    (0, 1),
-    (0, 3),
-    (0, 4),
-    (2, 1),
-    (2, 3),
-    (2, 7),
-    (6, 3),
-    (6, 4),
-    (6, 7),
-    (5, 1),
-    (5, 4),
-    (5, 7),
-    )
-
-colors = (
-    (1, 1, 1),
-    (1, 1, 1),
-    (1, 1, 1),
-    (1, 1, 1),
-    (1, 1, 1),
-    )
-
-colors_black = (
-    (0, 0, 0),
-    (0, 0, 0),
-    (0, 0, 0),
-    )
-
-surfaces = (
-    (0, 1, 2, 3),
-    (3, 2, 7, 6),
-    (6, 7, 5, 4),
-    (4, 5, 1, 0),
-    (1, 5, 7, 2),
-    (4, 0, 3, 6),
-    )
-
-def Dice():
+def rotate_die(die, number, angle, rand):
     glPushMatrix()
-    glRotate(4, -1, -1, -1)
-    die_one = Die(1)
-    die_one.draw()
+    if rand == 1: #avant
+        which_to_rotate(die, number, angle, (-1, 0, 0))
+    elif rand == 2: #gauche
+        which_to_rotate(die, number, angle, (0, -1, 0))
+    elif rand == 3: #droite
+        which_to_rotate(die, number, angle, (0, 1, 0))
+    elif rand == 4: #arriere
+        which_to_rotate(die, number, angle, (1, 0, 0))
     glPopMatrix()
-    glPushMatrix()
-    glRotate(4, 1, 1, 1)
-    die_two = Die(2)
-    die_two.draw()
-    glPopMatrix()
+
+def wait():
+    while True:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                return
 
 def main():
     pygame.init()
     display = (800, 600)
-    
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity
@@ -170,14 +55,45 @@ def main():
     glDepthFunc(GL_LESS)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
+    angle = 0
+    plus = 1
+    die_one, die_two = Die(1), Die(2)
+    done_coord = (1, 0, 0)
+    dtwo_coord = (1, 0, 0)
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if event.type == pygame.KEYDOWN:
+                wait()
+            '''
+            if event.key == K_w:
+                wait()
+                done_coord = (-1, 0, 0)
+            elif event.key == K_a:
+                wait()
+                done_coord = (0, -1, 0)
+            elif event.key == K_d:
+                wait()
+                done_coord = (0, 1, 0)
+            elif event.key == K_s:
+                wait()
+                done_coord = (1, 0, 0)
+                #dtwo_coord = (1, 0, 0)
+                #plus = 100
+            '''
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        Dice()
+        if angle == 0 or angle == 90:
+            angle = 0
+            rand = random.randint(1, 4)
+        if angle > 90:
+            angle = 0
+        angle += plus
+        rotate_die(die_one, 1, angle, rand)
+        #rotate_die(die_two, 2, angle, dtwo_coord)
         pygame.display.flip()
         pygame.time.wait(1)
 
