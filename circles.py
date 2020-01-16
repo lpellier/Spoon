@@ -35,17 +35,17 @@ class Circles:
 
 
 def face_placing(face):
-    if face == 1: #face avant
+    if face == 'av': #face avant
         pass
-    elif face == -1: #face arriere
+    elif face == 'ar': #face arriere
         glRotate(180, 1, 0, 0)
-    elif face == -2: #face haut
+    elif face == 'ha': #face haut
         glRotate(270, 1, 0, 0)
-    elif face == 2: #face bas
+    elif face == 'ba': #face bas
         glRotate(90, 1, 0, 0)
-    elif face == -3: #face gauche
+    elif face == 'ga': #face gauche
         glRotate(270, 0, 1, 0)
-    elif face == 3: #face droite
+    elif face == 'dr': #face droite
         glRotate(90, 0, 1, 0)
 
 

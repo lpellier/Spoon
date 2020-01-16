@@ -56,7 +56,7 @@ def main():
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     angle = 0
-    plus = 1
+    plus = 30
     die_one, die_two = Die(1), Die(2)
     done_coord = (1, 0, 0)
     dtwo_coord = (1, 0, 0)

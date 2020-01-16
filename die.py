@@ -31,8 +31,7 @@ class Die:
                 glColor3fv(colors_black[x])
                 glVertex3fv(self.vertices[vertex])
         glEnd()
-        face_un, face_de, face_tr = 1, 2, 3
-        face_qu, face_ci, face_si = -3, -2, -1
+        face_un, face_de, face_tr, face_qu, face_ci, face_si = 'av', 'ba', 'dr', 'ga', 'ha', 'ar'
         sides = (
                 [Circles(0, 0, face_un)],
                 [Circles(-0.5, 0.5, face_de), Circles(0.5, -0.5, face_de)],
