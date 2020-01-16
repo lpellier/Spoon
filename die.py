@@ -31,20 +31,19 @@ class Die:
                 glColor3fv(colors_black[x])
                 glVertex3fv(self.vertices[vertex])
         glEnd()
-        face_un, face_de, face_tr, face_qu, face_ci, face_si = 'av', 'ba', 'dr', 'ga', 'ha', 'ar'
         sides = (
-                [Circles(0, 0, face_un)],
-                [Circles(-0.5, 0.5, face_de), Circles(0.5, -0.5, face_de)],
-                [Circles(-0.5, 0.5, face_tr), Circles(0.5, -0.5, face_tr),
-                    Circles(0, 0, face_tr)],
-                [Circles(-0.5, -0.5, face_qu), Circles(0.5, 0.5, face_qu),
-                    Circles(-0.5, 0.5, face_qu), Circles(0.5, -0.5, face_qu)],
-                [Circles(-0.5, -0.5, face_ci), Circles(0.5, 0.5, face_ci),
-                    Circles(-0.5, 0.5, face_ci), Circles(0.5, -0.5, face_ci),
-                    Circles(0, 0, face_ci)],
-                [Circles(-0.5, -0.5, face_si), Circles(0.5, 0.5, face_si),
-                    Circles(-0.5, 0.5, face_si), Circles(0.5, -0.5, face_si),
-                    Circles(-0.5, 0, face_si), Circles(0.5, 0, face_si)],
+                [Circles(0, 0, 1, faces)],
+                [Circles(-0.5, 0.5, 2, faces), Circles(0.5, -0.5, 2, faces)],
+                [Circles(-0.5, 0.5, 3, faces), Circles(0.5, -0.5, 3, faces),
+                    Circles(0, 0, 3, faces)],
+                [Circles(-0.5, -0.5, 4, faces), Circles(0.5, 0.5, 4, faces),
+                    Circles(-0.5, 0.5, 4, faces), Circles(0.5, -0.5, 4, faces)],
+                [Circles(-0.5, -0.5, 5, faces), Circles(0.5, 0.5, 5, faces),
+                    Circles(-0.5, 0.5, 5, faces), Circles(0.5, -0.5, 5, faces),
+                    Circles(0, 0, 5, faces)],
+                [Circles(-0.5, -0.5, 6, faces), Circles(0.5, 0.5, 6, faces),
+                    Circles(-0.5, 0.5, 6, faces), Circles(0.5, -0.5, 6, faces),
+                    Circles(-0.5, 0, 6, faces), Circles(0.5, 0, 6, faces)],
                 )
         for side in sides:
             for circle in range(len(side)):
@@ -76,6 +75,27 @@ def get_vertices(number):
                 )
     return vertices
 
+def avant():
+    faces[1][0], faces[1][1] = faces[1][1], faces[1][0]
+    faces[0], faces[1] = faces[1], faces[0]
+
+def arriere():
+    faces[0][0], faces[0][1] = faces[0][1], faces[0][0]
+    faces[0], faces[1] = faces[1], faces[0]
+
+def gauche():
+    faces[2][0], faces[2][1] = faces[2][1], faces[2][0]
+    faces[0], faces[2] = faces[2], faces[0]
+
+def droite():
+    faces[0][0], faces[0][1] = faces[0][1], faces[0][0]
+    faces[0], faces[2] = faces[2], faces[0]
+
+faces = [
+    [1, 6],
+    [5, 2],
+    [4, 3],
+    ]
 
 edges = (
         (0, 1),

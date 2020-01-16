@@ -10,10 +10,11 @@ from OpenGL.GLU import *
 
 
 class Circles:
-    def __init__(self, posx, posy, face):
+    def __init__(self, posx, posy, face, faces):
         self.posx = posx
         self.posy = posy
         self.face = face
+        self.faces = faces
 
     def draw(self, number):
         sides = 100
@@ -23,7 +24,7 @@ class Circles:
             glTranslatef(-2, 0, 0)
         else:
             glTranslatef(2, 0, 0)
-        face_placing(self.face)
+        face_placing(self.face, self.faces)
         glBegin(GL_TRIANGLE_FAN)
         for i in range(sides):
             cosine = radius * cos(i*2*pi/sides)
@@ -34,19 +35,23 @@ class Circles:
         glPopMatrix()
 
 
-def face_placing(face):
-    if face == 'av': #face avant
-        pass
-    elif face == 'ar': #face arriere
-        glRotate(180, 1, 0, 0)
-    elif face == 'ha': #face haut
-        glRotate(270, 1, 0, 0)
-    elif face == 'ba': #face bas
-        glRotate(90, 1, 0, 0)
-    elif face == 'ga': #face gauche
-        glRotate(270, 0, 1, 0)
-    elif face == 'dr': #face droite
-        glRotate(90, 0, 1, 0)
+def face_placing(face, faces):
+    for i in range(len(faces)):
+        for j in range(len(faces[i])):
+            if faces[i][j] == face:
+                if i == 0 and j == 0: #face avant
+                    pass
+                elif i == 0 and j == 1: #face arriere
+                    glRotate(180, 1, 0, 0)
+                elif i == 1 and j == 0: #face haut
+                    glRotate(270, 1, 0, 0)
+                elif i == 1 and j == 1: #face bas
+                    glRotate(90, 1, 0, 0)
+                elif i == 2 and j == 0: #face gauche
+                    glRotate(270, 0, 1, 0)
+                elif i == 2 and j == 1: #face droite
+                    glRotate(90, 0, 1, 0)
+                return
 
 
 

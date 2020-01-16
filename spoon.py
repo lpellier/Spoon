@@ -45,7 +45,7 @@ def wait():
 
 def main():
     pygame.init()
-    display = (800, 600)
+    display = (1920, 1080)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity
@@ -56,7 +56,7 @@ def main():
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     angle = 0
-    plus = 30
+    plus = 22.5
     die_one, die_two = Die(1), Die(2)
     done_coord = (1, 0, 0)
     dtwo_coord = (1, 0, 0)
@@ -87,14 +87,28 @@ def main():
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         if angle == 0 or angle == 90:
+            if angle == 90:
+                rand_happen(rand_one)
+                rand_happen(rand_two)
             angle = 0
-            rand = random.randint(1, 4)
+            rand_one = random.randint(1, 4)
+            rand_two = random.randint(1, 4)
         if angle > 90:
             angle = 0
         angle += plus
-        rotate_die(die_one, 1, angle, rand)
-        #rotate_die(die_two, 2, angle, dtwo_coord)
+        rotate_die(die_one, 1, angle, rand_one)
+        rotate_die(die_two, 2, angle, rand_two)
         pygame.display.flip()
         pygame.time.wait(1)
+
+def rand_happen(rand):
+    if rand == 1:
+        avant()
+    elif rand == 2:
+        gauche()
+    elif rand == 3:
+        droite()
+    elif rand == 4:
+        arriere()
 
 main()
