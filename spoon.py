@@ -40,13 +40,20 @@ def rotate_die(die, number, angle, rand):
 def wait():
     while True:
         for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                quit()
             if event.type == KEYDOWN:
-                return
+                if event.key == K_ESCAPE:
+                    pygame.quit()
+                    quit()
+                else:
+                    return
 
 def main():
     pygame.init()
     display = (1920, 1080)
-    pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
+    pygame.display.set_mode(display, RESIZABLE | DOUBLEBUF | OPENGL)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity
     gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
@@ -63,7 +70,7 @@ def main():
 
     while True:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == QUIT:
                 pygame.quit()
                 quit()
             if event.type == KEYDOWN:
@@ -71,6 +78,9 @@ def main():
                     if event.type == pygame.QUIT:
                         pygame.quit()
                         quit()
+                        if event.key == K_ESCAPE:
+                            pygame.quit()
+                            quit()
                     angle+=plus
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
                     rotate_die(die_one, 1, angle, rand_one)
@@ -78,23 +88,6 @@ def main():
                     pygame.display.flip()
                     pygame.time.wait(1)
                 wait()
-            '''
-            if event.key == K_w:
-                wait()
-                done_coord = (-1, 0, 0)
-            elif event.key == K_a:
-                wait()
-                done_coord = (0, -1, 0)
-            elif event.key == K_d:
-                wait()
-                done_coord = (0, 1, 0)
-            elif event.key == K_s:
-                wait()
-                done_coord = (1, 0, 0)
-                #dtwo_coord = (1, 0, 0)
-                #plus = 100
-            '''
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         if angle == 0 or angle == 90:
             if angle == 90:
