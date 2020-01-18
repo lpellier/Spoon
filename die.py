@@ -8,6 +8,17 @@ from OpenGL.GLU import *
 
 from circles import *
 
+faces_one = [
+    [1, 6],
+    [5, 2],
+    [4, 3],
+    ]
+
+faces_two = [
+    [1, 6],
+    [5, 2],
+    [4, 3],
+    ]
 
 class Die:
     def __init__(self,  number):
@@ -31,6 +42,10 @@ class Die:
                 glColor3fv(colors_black[x])
                 glVertex3fv(self.vertices[vertex])
         glEnd()
+        if number == 1:
+            faces = faces_one
+        elif number == 2:
+            faces = faces_two
         sides = (
                 [Circles(0, 0, 1, faces)],
                 [Circles(-0.5, 0.5, 2, faces), Circles(0.5, -0.5, 2, faces)],
@@ -75,27 +90,21 @@ def get_vertices(number):
                 )
     return vertices
 
-def avant():
-    faces[1][0], faces[1][1] = faces[1][1], faces[1][0]
-    faces[0], faces[1] = faces[1], faces[0]
-
-def arriere():
-    faces[0][0], faces[0][1] = faces[0][1], faces[0][0]
-    faces[0], faces[1] = faces[1], faces[0]
-
-def gauche():
-    faces[2][0], faces[2][1] = faces[2][1], faces[2][0]
-    faces[0], faces[2] = faces[2], faces[0]
-
-def droite():
-    faces[0][0], faces[0][1] = faces[0][1], faces[0][0]
-    faces[0], faces[2] = faces[2], faces[0]
-
-faces = [
-    [1, 6],
-    [5, 2],
-    [4, 3],
-    ]
+def swap(f, n, direction):
+    if n == 1:
+        faces_one[f][0], faces_one[f][1] = faces_one[f][1], faces_one[f][0]
+        if direction == 'y':
+            faces_one[0], faces_one[1] = faces_one[1], faces_one[0]
+        elif direction == 'x':
+            faces_one[0], faces_one[2] = faces_one[2], faces_one[0]
+        return faces_one[0][0]
+    elif n == 2:
+        faces_two[f][0], faces_two[f][1] = faces_two[f][1], faces_two[f][0]
+        if direction == 'y':
+            faces_two[0], faces_two[1] = faces_two[1], faces_two[0]
+        elif direction == 'x':
+            faces_two[0], faces_two[2] = faces_two[2], faces_two[0]
+        return faces_two[0][0]
 
 edges = (
         (0, 1),
