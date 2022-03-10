@@ -1,3 +1,4 @@
 # Spoon
 Jeu de dés.
-En cours de projet
+
+Yes it's a drinking game. Don't try this at home.
